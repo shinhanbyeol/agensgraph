@@ -21,6 +21,7 @@
 #include "nodes/bitmapset.h"
 #include "nodes/pg_list.h"
 
+
 /* ----------------------------------------------------------------
  *						node definitions
  * ----------------------------------------------------------------
@@ -1539,6 +1540,13 @@ typedef struct OnConflictExpr
 	int			exclRelIndex;	/* RT index of 'excluded' relation */
 	List	   *exclRelTlist;	/* tlist of the EXCLUDED pseudo relation */
 } OnConflictExpr;
+
+typedef enum RowRefType
+{
+	ROW_REF_TID,
+	ROW_REF_ROWID,
+	ROW_REF_COPY
+} RowRefType;
 
 /*
  * Cypher Query Language
