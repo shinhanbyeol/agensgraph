@@ -196,6 +196,8 @@ itemptr_decode(ItemPointer itemptr, int64 encoded)
 	ItemPointerSet(itemptr, block, offset);
 }
 
+extern void index_update_stats(Relation rel, bool hasindex, double reltuples);
+
 /* for agensgraph */
 extern bool DisableIndexLabel(Oid relid);
 
