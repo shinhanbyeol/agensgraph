@@ -119,6 +119,11 @@ bool		XLOG_DEBUG = false;
 
 int			wal_segment_size = DEFAULT_XLOG_SEG_SIZE;
 
+/* Hook for plugins to get control in CheckPointGuts() */
+CheckPoint_hook_type CheckPoint_hook = NULL;
+double CheckPointProgress;
+after_checkpoint_cleanup_hook_type after_checkpoint_cleanup_hook = NULL;
+
 /*
  * Number of WAL insertion locks to use. A higher value allows more insertions
  * to happen concurrently, but adds some CPU overhead to flushing the WAL,
@@ -6462,6 +6467,7 @@ StartupXLOG(void)
 	XLogPageReadPrivate private;
 	bool		promoted = false;
 	struct stat st;
+	bool		wasInRecovery;
 
 	/*
 	 * We should have an aux process resource owner to use, and we should not
@@ -7318,6 +7324,8 @@ StartupXLOG(void)
 			pg_rusage_init(&ru0);
 
 			InRedo = true;
+			if (RedoStartHook != NULL)
+				RedoStartHook();
 
 			ereport(LOG,
 					(errmsg("redo starts at %X/%X",
@@ -7563,6 +7571,8 @@ StartupXLOG(void)
 						 * of postmaster.  Log messages issued from
 						 * postmaster.
 						 */
+						if (RedoFinishHook != NULL)
+							RedoFinishHook(false);
 						proc_exit(3);
 
 					case RECOVERY_TARGET_ACTION_PAUSE:
@@ -7592,6 +7602,9 @@ StartupXLOG(void)
 				ereport(LOG,
 						(errmsg("last completed transaction was at log time %s",
 								timestamptz_to_str(xtime))));
+
+			if (RedoFinishHook != NULL)
+				RedoFinishHook(true);
 
 			InRedo = false;
 		}
@@ -8003,6 +8016,8 @@ StartupXLOG(void)
 	 */
 	PreallocXlogFiles(EndOfLog);
 
+	wasInRecovery = InRecovery;
+
 	/*
 	 * Okay, we're officially UP.
 	 */
@@ -8061,6 +8076,9 @@ StartupXLOG(void)
 	 * commit timestamp.
 	 */
 	CompleteCommitTsInitialization();
+
+	if (wasInRecovery && after_checkpoint_cleanup_hook)
+		after_checkpoint_cleanup_hook(ProcLastRecPtr, 0);
 
 	/*
 	 * All done with end-of-recovery actions.
@@ -9286,6 +9304,9 @@ CreateCheckPoint(int flags)
 	if (!RecoveryInProgress())
 		TruncateSUBTRANS(GetOldestTransactionIdConsideredRunning());
 
+	if (after_checkpoint_cleanup_hook)
+		after_checkpoint_cleanup_hook(ProcLastRecPtr, flags);
+
 	/* Real work is done, but log and update stats before releasing lock. */
 	LogCheckpointEnd(false);
 
@@ -9359,6 +9380,8 @@ CreateEndOfRecoveryRecord(void)
 static void
 CheckPointGuts(XLogRecPtr checkPointRedo, int flags)
 {
+	if (CheckPoint_hook)
+		CheckPoint_hook(checkPointRedo, flags);
 	CheckPointRelationMap();
 	CheckPointReplicationSlots();
 	CheckPointSnapBuild();
@@ -12921,3 +12944,6 @@ XLogRequestWalReceiverReply(void)
 {
 	doRequestWalReceiverReply = true;
 }
+
+void (*RedoStartHook) (void) = NULL;
+void (*RedoFinishHook) (bool) = NULL;
