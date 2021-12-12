@@ -848,6 +848,14 @@ extern void ExecEvalAggOrderedTransDatum(ExprState *state, ExprEvalStep *op,
 extern void ExecEvalAggOrderedTransTuple(ExprState *state, ExprEvalStep *op,
 										 ExprContext *econtext);
 
+typedef bool (*ExecInitFuncHookType)(ExprEvalStep *scratch, Expr *node,
+									 List *args, Oid funcid,
+									 Oid inputcollid, ExprState *state);
+extern ExecInitFuncHookType ExecInitFuncHook;
+
+extern void ExecInitExprRec(Expr *node, ExprState *state, Datum *resv,
+							bool *resnull);
+
 extern void ExecEvalCypherTypeCast(ExprState *state, ExprEvalStep *op);
 extern void ExecEvalCypherMapExpr(ExprState *state, ExprEvalStep *op);
 extern void ExecEvalCypherListExpr(ExprState *state, ExprEvalStep *op);
