@@ -766,10 +766,12 @@ createVertex(ModifyGraphState *mgstate, GraphVertex *gvertex, Graphid *vid,
 	ResultRelInfo *savedResultRelInfo;
 	Datum		vertex;
 	Datum		vertexProp;
+	bool		isExtendedRoutine;
 
 	resultRelInfo = getResultRelInfo(mgstate, gvertex->relid);
 	savedResultRelInfo = estate->es_result_relation_info;
 	estate->es_result_relation_info = resultRelInfo;
+	isExtendedRoutine = table_has_extended_am(resultRelInfo->ri_RelationDesc);
 
 	vertex = findVertex(slot, gvertex, vid);
 
@@ -806,14 +808,25 @@ createVertex(ModifyGraphState *mgstate, GraphVertex *gvertex, Graphid *vid,
 	/*
 	 * insert the tuple normally
 	 */
-	table_tuple_insert(resultRelInfo->ri_RelationDesc, elemTupleSlot,
-					   mgstate->modify_cid + MODIFY_CID_OUTPUT,
-					   0, NULL);
+	if (isExtendedRoutine)
+	{
+		table_extended_tuple_insert(resultRelInfo->ri_RelationDesc, elemTupleSlot, estate,
+									mgstate->modify_cid + MODIFY_CID_OUTPUT, 0, NULL);
+	}
+	else
+	{
+		table_tuple_insert(resultRelInfo->ri_RelationDesc, elemTupleSlot,
+						   mgstate->modify_cid + MODIFY_CID_OUTPUT,
+						   0, NULL);
 
-	/* insert index entries for the tuple */
-	if (resultRelInfo->ri_NumIndices > 0)
-		ExecInsertIndexTuples(elemTupleSlot, estate, false,
-							  NULL, NIL);
+		/* insert index entries for the tuple */
+		if (resultRelInfo->ri_NumIndices > 0)
+		{
+			List *recheckIndexes = ExecInsertIndexTuples(elemTupleSlot, estate,
+														 false, NULL, NIL);
+			list_free(recheckIndexes);
+		}
+	}
 
 	vertex = makeGraphVertexDatum(elemTupleSlot->tts_values[0],
 								  elemTupleSlot->tts_values[1],

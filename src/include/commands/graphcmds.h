@@ -20,6 +20,9 @@ extern ObjectAddress RenameGraph(const char *oldname, const char *newname);
 extern void CreateLabelCommand(CreateLabelStmt *labelStmt,
 							   const char *queryString, int stmt_location,
 							   int stmt_len, ParamListInfo params);
+extern ObjectAddress DefineLabel(CreateStmt *stmt, ObjectAddress *reladdr,
+								 char labkind, bool is_fixed_id,
+								 int32 fixed_id);
 extern ObjectAddress RenameLabel(RenameStmt *stmt);
 extern void CheckLabelType(ObjectType type, Oid laboid, const char *command);
 extern void CheckInheritLabel(CreateStmt *stmt);
