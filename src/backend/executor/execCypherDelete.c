@@ -136,7 +136,8 @@ ExecDeleteEdgeOrVertex(ModifyGraphState *mgstate, ResultRelInfo *resultRelInfo,
 		bool		dodelete;
 
 		dodelete = ExecBRDeleteTriggers(estate, epqstate, resultRelInfo,
-										tupleid, NULL, NULL);
+										ItemPointerGetDatum(tupleid), NULL,
+										NULL);
 		if (!dodelete)
 		{
 			if (required)
@@ -177,8 +178,8 @@ ExecDeleteEdgeOrVertex(ModifyGraphState *mgstate, ResultRelInfo *resultRelInfo,
 	}
 
 	/* AFTER ROW DELETE Triggers */
-	ExecARDeleteTriggers(estate, resultRelInfo, tupleid, NULL,
-						 NULL);
+	ExecARDeleteTriggers(estate, resultRelInfo, ItemPointerGetDatum(tupleid),
+						 NULL, NULL);
 
 	if (typeOid == EDGEOID)
 	{

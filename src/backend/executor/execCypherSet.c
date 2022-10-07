@@ -363,7 +363,7 @@ GraphTableTupleUpdate(ModifyGraphState *mgstate, Oid tts_value_type,
 		resultRelInfo->ri_TrigDesc->trig_update_before_row)
 	{
 		if (!ExecBRUpdateTriggers(estate, epqstate, resultRelInfo,
-								  ctid, NULL, elemTupleSlot))
+								  PointerGetDatum(ctid), NULL, elemTupleSlot))
 			return (Datum) 0;
 	}
 
@@ -474,7 +474,6 @@ lreplace:
 						elog(ERROR, "unexpected table_tuple_lock status: %u",
 							 result);
 				}
-				break;
 			}
 		default:
 			elog(ERROR, "unrecognized heap_update status: %u", result);
@@ -492,8 +491,8 @@ lreplace:
 	graphWriteStats.updateProperty++;
 
 	/* AFTER ROW UPDATE Triggers */
-	ExecARUpdateTriggers(estate, resultRelInfo, ctid, NULL, elemTupleSlot,
-						 recheckIndexes, NULL);
+	ExecARUpdateTriggers(estate, resultRelInfo, PointerGetDatum(ctid), NULL,
+						 elemTupleSlot, recheckIndexes, NULL);
 
 	list_free(recheckIndexes);
 
@@ -574,10 +573,9 @@ LegacyUpdateElemProp(ModifyGraphState *mgstate, Oid elemtype, Datum gid,
 		resultRelInfo->ri_TrigDesc->trig_update_before_row)
 	{
 		if (!ExecBRUpdateTriggers(estate, epqstate, resultRelInfo,
-								  ctid, NULL, elemTupleSlot))
+								  PointerGetDatum(ctid), NULL, elemTupleSlot))
 		{
 			elog(ERROR, "Trigger must not be NULL on Cypher Clause.");
-			return NULL;
 		}
 	}
 
@@ -625,8 +623,8 @@ LegacyUpdateElemProp(ModifyGraphState *mgstate, Oid elemtype, Datum gid,
 	graphWriteStats.updateProperty++;
 
 	/* AFTER ROW UPDATE Triggers */
-	ExecARUpdateTriggers(estate, resultRelInfo, ctid, NULL, elemTupleSlot,
-						 recheckIndexes, NULL);
+	ExecARUpdateTriggers(estate, resultRelInfo, PointerGetDatum(ctid), NULL,
+						 elemTupleSlot, recheckIndexes, NULL);
 
 	list_free(recheckIndexes);
 
