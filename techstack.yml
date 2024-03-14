@@ -1,0 +1,129 @@
+repo_name: shinhanbyeol/agensgraph
+report_id: 81422d7ab6fb018ec29eee97a4267d05
+version: 0.1
+repo_type: Public
+timestamp: '2024-03-14T04:45:30+00:00'
+requested_by: emotionbug
+provider: github
+branch: main
+detected_tools_count: 11
+tools:
+- name: Assembly Language
+  description: A low-level programming language
+  website_url: https://en.wikipedia.org/wiki/Assembly_language
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/4934/default_71f18bbdc61fb88cefb66415bb55dc6f1e60e5ec.png
+  detection_source_url: https://github.com/shinhanbyeol/agensgraph
+  detection_source: Repo Metadata
+- name: C lang
+  description: One of the most widely used programming languages of all time
+  website_url: http://en.wikipedia.org/wiki/C_(programming_language)
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/no-img-open-source.png
+  detection_source_url: https://github.com/shinhanbyeol/agensgraph
+  detection_source: Repo Metadata
+- name: C++
+  description: Has imperative, object-oriented and generic programming features, while
+    also providing the facilities for low level memory manipulation
+  website_url: http://www.cplusplus.com/
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1049/cplusplus.png
+  detection_source_url: https://github.com/shinhanbyeol/agensgraph
+  detection_source: Repo Metadata
+- name: Perl
+  description: Highly capable, feature-rich programming language with over 26 years
+    of development
+  website_url: http://www.perl.org/
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1048/perl.png
+  detection_source_url: https://github.com/shinhanbyeol/agensgraph
+  detection_source: Repo Metadata
+- name: Python
+  description: A clear and powerful object-oriented programming language, comparable
+    to Perl, Ruby, Scheme, or Java.
+  website_url: https://www.python.org
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/993/pUBY5pVj.png
+  detection_source_url: https://github.com/shinhanbyeol/agensgraph
+  detection_source: Repo Metadata
+- name: Ruby
+  description: A dynamic, interpreted, open source programming language with a focus
+    on simplicity and productivity
+  website_url: https://www.ruby-lang.org
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/989/ruby.png
+  detection_source_url: https://github.com/shinhanbyeol/agensgraph
+  detection_source: Repo Metadata
+- name: SQL
+  description: It is a domain-specific language used in programming
+  website_url: https://en.wikipedia.org/wiki/SQL
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/2271/default_068d33483bba6b81ee13fbd4dc7aab9780896a54.png
+  detection_source_url: https://github.com/shinhanbyeol/agensgraph/blob/main/contrib/adminpack/adminpack--1.0--1.1.sql
+  detection_source: contrib/adminpack/adminpack--1.0--1.1.sql
+  last_updated_by: Stephen Frost
+  last_updated_on: 2018-04-06 18:47:10.000000000 Z
+- name: GNU sed
+  description: A non-interactive command-line text editor
+  website_url: https://www.gnu.org/software/sed/
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Text Editor
+  image_url: https://img.stackshare.io/service/3635/default_6369b655647204026aee2fa41eaa721d27a30528.png
+  detection_source_url: https://github.com/shinhanbyeol/agensgraph
+  detection_source: Repo Metadata
+- name: Git
+  description: Fast, scalable, distributed revision control system
+  website_url: http://git-scm.com/
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Version Control System
+  image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source_url: https://github.com/shinhanbyeol/agensgraph
+  detection_source: Repo Metadata
+- name: GitHub Actions
+  description: Automate your workflow from idea to production
+  website_url: https://github.com/features/actions
+  open_source: false
+  hosted_saas: true
+  category: Build, Test, Deploy
+  sub_category: Continuous Integration
+  image_url: https://img.stackshare.io/service/11563/actions.png
+  detection_source_url: https://github.com/shinhanbyeol/agensgraph/blob/main/.github/workflows/regression.yml
+  detection_source: ".github/workflows/regression.yml"
+  last_updated_by: Alex Kwak
+  last_updated_on: 2022-07-26 04:39:41.000000000 Z
+- name: Shell
+  description: A shell is a text-based terminal, used for manipulating programs and
+    files. Shell scripts typically manage program execution.
+  website_url: https://en.wikipedia.org/wiki/Shell_script
+  open_source: false
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/4631/default_c2062d40130562bdc836c13dbca02d318205a962.png
+  detection_source_url: https://github.com/shinhanbyeol/agensgraph
+  detection_source: Repo Metadata
